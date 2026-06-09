@@ -1,0 +1,24 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Environment
+backend/.env
+
+# Database
+*.db
+backend/screening.db
+
+# Chroma
+vector_store/
+
+# Node
+frontend/node_modules/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
