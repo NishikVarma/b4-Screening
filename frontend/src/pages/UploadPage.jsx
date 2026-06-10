@@ -12,10 +12,19 @@ export default function UploadPage() {
     const [role, setRole] = useState("ai_ml");
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState(null);
+
+    const showToast = (message) => {
+        setToast(message);
+
+        setTimeout(() => {
+            setToast(null);
+        }, 3500);
+    };
 
     const handleStart = async () => {
         if (!file) {
-            alert("Please upload a resume.");
+            showToast("Please upload a resume.");
             return;
         }
 
@@ -31,47 +40,88 @@ export default function UploadPage() {
             navigate("/interview");
         } catch (err) {
             console.error(err);
-            alert("Failed to start assessment.");
+            showToast("Failed to start assessment.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="page">
-            <div className="container">
-                <h1>Candidate Assessment</h1>
-
-                <div className="section">
-                    <label>Resume</label>
-
-                    <input
-                        type="file"
-                        accept=".pdf,.txt"
-                        onChange={(e) => setFile(e.target.files[0])}
-                    />
+        <>
+            {toast && (
+                <div className="toast">
+                    {toast}
                 </div>
+            )}
 
-                <div className="section">
-                    <label>Role</label>
+            <div className="page">
+                <div className="container">
+                    <h1>Candidate Assessment</h1>
 
-                    <select
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
+                    <p className="subtitle">
+                        Upload your resume and select a role to begin the
+                        technical assessment.
+                    </p>
+
+                    <div className="form-section">
+                        <label>Resume</label>
+
+                        <label className="upload-box">
+                            <input
+                                type="file"
+                                accept=".pdf,.txt"
+                                hidden
+                                onChange={(e) => setFile(e.target.files[0])}
+                            />
+
+                            <div>
+                                <div className="upload-title">
+                                    {file
+                                        ? file.name
+                                        : "Select Resume"}
+                                </div>
+
+                                <div className="upload-subtitle">
+                                    .pdf or .txt format (Max 5MB)
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div className="form-section">
+                        <label>Role</label>
+
+                        <select
+                            value={role}
+                            onChange={(e) =>
+                                setRole(e.target.value)
+                            }
+                        >
+                            <option value="ai_ml">
+                                AI / ML Engineer
+                            </option>
+
+                            <option value="backend">
+                                Backend Engineer
+                            </option>
+                        </select>
+                    </div>
+
+                    <button
+                        className="primary-btn"
+                        onClick={handleStart}
+                        disabled={loading}
                     >
-                        <option value="ai_ml">AI / ML Engineer</option>
-                        <option value="backend">Backend Engineer</option>
-                    </select>
-                </div>
+                        {loading && (
+                            <span className="spinner"></span>
+                        )}
 
-                <button
-                    className="primary-btn"
-                    onClick={handleStart}
-                    disabled={loading}
-                >
-                    {loading ? "Preparing Assessment..." : "Begin Assessment"}
-                </button>
+                        {loading
+                            ? "Analyzing Resume..."
+                            : "Begin Assessment"}
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
