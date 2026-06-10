@@ -47,6 +47,17 @@ export const submitAnswer = async (
     return data;
 };
 
+export const skipQuestion = async (
+    sessionId,
+    questionId
+) => {
+    const { data } = await api.post(
+        `/sessions/${sessionId}/questions/${questionId}/skip`
+    );
+
+    return data;
+};
+
 export const getSummary = async (sessionId) => {
     const { data } = await api.get(
         `/sessions/${sessionId}/summary`

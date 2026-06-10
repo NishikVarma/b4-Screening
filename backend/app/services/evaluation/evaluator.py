@@ -40,6 +40,44 @@ Schema:
 }}
 """
 
+def generate_overall_summary(
+        question_details: list[dict],
+) -> str:
+    try:
+        prompt = f"""
+You are a senior technical interviewer.
+
+Review the interview results below.
+
+{json.dumps(question_details, indent=2)}
+
+Return exactly in this format:
+
+Strengths
+• point
+• point
+
+Areas for Improvement
+    • point
+• point
+
+Recommendation
+• point
+
+Keep it concise and professional.
+"""
+
+        response = _model.generate_content(
+            prompt
+        )
+
+        return response.text.strip()
+
+    except Exception:
+        return (
+            "Overall assessment could not "
+            "be generated."
+        )
 
 def evaluate_answer(
         question: str,
@@ -50,7 +88,10 @@ def evaluate_answer(
             _EVALUATION_PROMPT.format(
                 question=question,
                 answer=answer,
-            )
+            ),
+            generation_config={
+                "response_mime_type": "application/json"
+            },
         )
 
         content = response.text.strip()

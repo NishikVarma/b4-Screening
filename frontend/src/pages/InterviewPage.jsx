@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
     getNextQuestion,
     submitAnswer,
+    skipQuestion,
 } from "../services/api";
 
 export default function InterviewPage() {
@@ -108,6 +109,37 @@ export default function InterviewPage() {
         }
     };
 
+    const handleSkip = async () => {
+        try {
+            setSubmitting(true);
+
+            const result =
+                await skipQuestion(
+                    sessionId,
+                    question.id
+                );
+
+            setAnswer("");
+
+            if (result.is_complete) {
+                navigate("/results");
+                return;
+            }
+
+            setQuestion(result.next_question);
+            setQuestionNumber(
+                (prev) => prev + 1
+            );
+        } catch (err) {
+            console.error(err);
+            showToast(
+                "Failed to skip question."
+            );
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="page">
@@ -128,11 +160,42 @@ export default function InterviewPage() {
                 </div>
             )}
 
+            {submitting && (
+                <div className="evaluation-overlay">
+                    <div className="evaluation-modal">
+                        <div className="spinner large-spinner"></div>
+
+                        <h3>
+                            Evaluating Response
+                        </h3>
+
+                        <p>
+                            Please wait while
+                            the assessment is
+                            processed.
+                        </p>
+                    </div>
+                </div>
+            )}
+
             <div className="page">
                 <div className="container">
-                    <h1>
-                        Candidate Assessment
-                    </h1>
+                    <div className="assessment-header">
+                        <h1>
+                            Candidate Assessment
+                        </h1>
+
+                        <button
+                            className="exit-link"
+                            onClick={() =>
+                                setShowExitModal(
+                                    true
+                                )
+                            }
+                        >
+                            Exit
+                        </button>
+                    </div>
 
                     <div className="meta">
                         Question {questionNumber} of{" "}
@@ -156,19 +219,23 @@ export default function InterviewPage() {
                                 )
                             }
                             placeholder="Enter your answer..."
+                            disabled={
+                                submitting
+                            }
                         />
                     </div>
 
                     <div className="button-group">
                         <button
                             className="secondary-btn"
-                            onClick={() =>
-                                setShowExitModal(
-                                    true
-                                )
+                            onClick={
+                                handleSkip
+                            }
+                            disabled={
+                                submitting
                             }
                         >
-                            Exit Assessment
+                            Skip Question
                         </button>
 
                         <button
@@ -180,9 +247,7 @@ export default function InterviewPage() {
                                 submitting
                             }
                         >
-                            {submitting
-                                ? "Submitting..."
-                                : "Submit Response"}
+                            Submit Response
                         </button>
                     </div>
                 </div>

@@ -25,6 +25,7 @@ class SessionSummaryResponse(BaseModel):
     answered: int
     average_score: Optional[float]
     feedback_summary: Optional[str]
+    question_details: list[dict]
 
     model_config = {"from_attributes": True}
 

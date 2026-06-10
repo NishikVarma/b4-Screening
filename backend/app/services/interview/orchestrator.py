@@ -10,6 +10,7 @@ from app.models.models import (
 from app.services.resume.parser import process_resume
 from app.services.rag.question_generator import generate_questions
 from app.services.evaluation.evaluator import evaluate_answer
+from app.services.evaluation.evaluator import generate_overall_summary
 
 def create_session(
         db: Session,
@@ -185,6 +186,49 @@ def submit_answer(
 
     return answer
 
+def skip_question(
+        db: Session,
+        session_id: str,
+        question_id: str,
+) -> Answer:
+    session = db.get(InterviewSession, session_id)
+
+    if not session:
+        raise ValueError("Session not found")
+
+    question = (
+        db.query(Question)
+        .filter(
+            Question.id == question_id,
+            Question.session_id == session_id,
+            )
+        .first()
+    )
+
+    if not question:
+        raise ValueError("Question not found")
+
+    if question.answer:
+        raise ValueError("Question already answered")
+
+    answer = Answer(
+        question_id=question.id,
+        text="[SKIPPED]",
+        score=None,
+        feedback="Question skipped.",
+    )
+
+    db.add(answer)
+    db.commit()
+    db.refresh(answer)
+
+    remaining = get_next_question(db, session_id)
+
+    if remaining is None:
+        session.status = "completed"
+        db.commit()
+
+    return answer
 
 def get_session_summary(
         db: Session,
@@ -214,11 +258,37 @@ def get_session_summary(
         if scores
         else None
     )
+    question_details = [
+        {
+            "question": q.text,
+            "answer": (
+                q.answer.text
+                if q.answer
+                else None
+            ),
+            "score": (
+                q.answer.score
+                if q.answer
+                else None
+            ),
+            "feedback": (
+                q.answer.feedback
+                if q.answer
+                else None
+            ),
+        }
+        for q in session.questions
+    ]
+
+    overall_summary = generate_overall_summary(
+        question_details
+    )
 
     return {
         "session": session,
         "total_questions": total_questions,
         "answered": answered,
         "average_score": average_score,
-        "feedback_summary": None,
+        "feedback_summary": overall_summary,
+        "question_details": question_details,
     }

@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { getSummary } from "../services/api";
 
 export default function ResultsPage() {
     const navigate = useNavigate();
+    const sessionId = localStorage.getItem("sessionId");
 
     const [summary, setSummary] = useState(null);
-
-    const sessionId = localStorage.getItem("sessionId");
+    const [showDetails, setShowDetails] = useState(false); // New State
 
     useEffect(() => {
         if (!sessionId) {
@@ -40,12 +39,33 @@ export default function ResultsPage() {
 
     return (
         <div className="page">
-            <div className="container">
+            <div className="results-container">
                 <h1>Assessment Complete</h1>
+
+                {summary.feedback_summary && (
+                    <div className="overall-summary-card">
+                        <h2>Overall Assessment</h2>
+
+                        <p
+                            style={{
+                                whiteSpace: "pre-wrap",
+                            }}
+                        >
+                            {summary.feedback_summary}
+                        </p>
+                    </div>
+                )}
 
                 <div className="summary-grid">
                     <div className="summary-card">
-                        <h3>Total Questions</h3>
+                        <h3>Average Score</h3>
+                        <p className="score-large">
+                            {summary.average_score ?? "-"}/10
+                        </p>
+                    </div>
+
+                    <div className="summary-card">
+                        <h3>Questions</h3>
                         <p>{summary.total_questions}</p>
                     </div>
 
@@ -55,21 +75,20 @@ export default function ResultsPage() {
                     </div>
 
                     <div className="summary-card">
-                        <h3>Average Score</h3>
-                        <p>
-                            {summary.average_score
-                                ? summary.average_score
-                                : "Not Available"}
-                        </p>
-                    </div>
-
-                    <div className="summary-card">
                         <h3>Status</h3>
                         <p>{summary.session.status}</p>
                     </div>
                 </div>
 
-                <div style={{ marginTop: "32px" }}>
+                {/* New Action Buttons Section */}
+                <div className="action-buttons">
+                    <button
+                        className="secondary-btn"
+                        onClick={() => setShowDetails(!showDetails)}
+                    >
+                        {showDetails ? "Hide Detailed Analysis" : "Check Detailed Analysis"}
+                    </button>
+
                     <button
                         className="primary-btn"
                         onClick={() => {
@@ -79,6 +98,51 @@ export default function ResultsPage() {
                     >
                         Start New Assessment
                     </button>
+                </div>
+
+                <div
+                    className={`detailed-analysis-section ${
+                        showDetails ? "open" : ""
+                    }`}
+                >
+                    <div className="results-list">
+                        {summary.question_details.map((item, index) => (
+                            <div key={index} className="result-card">
+                                <div className="result-header">
+                                    <h3>Question {index + 1}</h3>
+
+                                    <span className="result-score">
+                        {item.score === null
+                            ? "Skipped"
+                            : `${item.score}/10`}
+                    </span>
+                                </div>
+
+                                <p className="result-question">
+                                    {item.question}
+                                </p>
+
+                                {item.answer === "[SKIPPED]" ? (
+                                    <div className="result-section">
+                                        <strong>Status</strong>
+                                        <p>Skipped</p>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="result-section">
+                                            <strong>Response</strong>
+                                            <p>{item.answer}</p>
+                                        </div>
+
+                                        <div className="result-section">
+                                            <strong>Feedback</strong>
+                                            <p>{item.feedback}</p>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

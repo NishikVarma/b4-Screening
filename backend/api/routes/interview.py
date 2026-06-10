@@ -27,6 +27,7 @@ from app.services.interview.orchestrator import (
     get_next_question,
     get_session_summary,
     submit_answer,
+    skip_question,
     upload_resume,
 )
 
@@ -164,6 +165,42 @@ def submit_answer_route(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
+@router.post(
+    "/{session_id}/questions/{question_id}/skip",
+    response_model=SubmitAnswerResponse,
+)
+def skip_question_route(
+        session_id: str,
+        question_id: str,
+        db: Session = Depends(get_db),
+):
+    try:
+        answer = skip_question(
+            db=db,
+            session_id=session_id,
+            question_id=question_id,
+        )
+
+        next_question = get_next_question(
+            db=db,
+            session_id=session_id,
+        )
+
+        return SubmitAnswerResponse(
+            answer=answer,
+            next_question=(
+                _question_to_response(next_question)
+                if next_question
+                else None
+            ),
+            is_complete=(next_question is None),
+        )
+
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=str(exc),
+        )
 
 @router.get("/{session_id}/summary", response_model=SessionSummaryResponse)
 def get_summary_route(
@@ -182,6 +219,7 @@ def get_summary_route(
             answered=summary["answered"],
             average_score=summary["average_score"],
             feedback_summary=summary["feedback_summary"],
+            question_details=summary["question_details"],
         )
 
     except ValueError as exc:
