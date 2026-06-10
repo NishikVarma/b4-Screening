@@ -9,6 +9,7 @@ from app.models.models import (
 )
 from app.services.resume.parser import process_resume
 from app.services.rag.question_generator import generate_questions
+from app.services.evaluation.evaluator import evaluate_answer
 
 def create_session(
         db: Session,
@@ -160,9 +161,16 @@ def submit_answer(
     if question.answer:
         raise ValueError("Question already answered")
 
+    evaluation = evaluate_answer(
+        question.text,
+        answer_text,
+    )
+
     answer = Answer(
         question_id=question.id,
         text=answer_text,
+        score=evaluation.score,
+        feedback=evaluation.feedback,
     )
 
     db.add(answer)
