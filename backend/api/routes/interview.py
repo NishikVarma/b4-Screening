@@ -89,6 +89,11 @@ async def upload_resume_route(
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
     except Exception as exc:
+        if "RESOURCE_EXHAUSTED" in str(exc):
+            raise HTTPException(
+                status_code=429,
+                detail="Gemini API quota exceeded. Please try again later."
+            )
         raise HTTPException(status_code=500, detail=str(exc))
 
 
