@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     # ── App ───────────────────────────────────────────────────
     app_env: Literal["development", "production"] = "development"
     secret_key: str = "asldfjawenwerajck"
-    cors_origins: str = "http://localhost:3000,http://localhost:5173"
+    cors_origins: str = "http://localhost:3000,http://localhost:5173,https://b4-screening-git-main-nishk-varmas-projects.vercel.app/"
 
     # ── RAG Tuning ────────────────────────────────────────────
     chunk_size: int = 500

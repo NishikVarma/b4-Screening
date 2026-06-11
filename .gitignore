@@ -1,24 +1,60 @@
+# =========================
 # Python
+# =========================
+
 backend/.venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Environment
+# Environment variables
 backend/.env
 
+# =========================
 # Database
+# =========================
+
 *.db
-backend/screening.db
+*.sqlite
+*.sqlite3
 
-# Chroma
+# =========================
+# Vector Store
+# =========================
+
 vector_store/
+backend/vector_store/
 
-# Node
+# =========================
+# Frontend
+# =========================
+
 frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
 
+# Local env files
+frontend/*.local
+
+# Logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# =========================
 # IDE
-.idea/
-.vscode/
+# =========================
 
+.vscode/
+.idea/
+
+# =========================
 # OS
+# =========================
+
 .DS_Store
+Thumbs.db
