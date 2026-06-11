@@ -2,10 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes.interview import router as interview_router
-from app.core.config import get_settings
 from app.core.database import Base, engine
-
-settings = get_settings()
 
 app = FastAPI(
     title="AI Interview Screening API",
@@ -20,7 +17,11 @@ def startup():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
