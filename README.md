@@ -14,6 +14,38 @@ The system parses resumes, retrieves relevant concepts from technical textbooks 
 
 ---
 
+## Demo Video
+
+https://github.com/user-attachments/assets/9552f84c-7be4-4e3b-bbf9-8778034161ab
+
+**Duration:** 1 minute 40 seconds
+
+### Demonstrated Capabilities
+
+* Resume parsing and candidate profiling using Gemini
+* RAG-powered retrieval from role-specific knowledge bases
+* Personalized interview question generation
+* AI-powered answer evaluation and scoring
+* Detailed candidate feedback and analysis
+* Overall assessment and hiring insights
+
+---
+
+## Screenshots
+## Screenshots
+
+<p align="center">
+  <img src="assets/home-page.png" width="45%">
+  <img src="assets/Q1-page.png" width="45%">
+</p>
+
+<p align="center">
+  <img src="assets/result-page1.png" width="45%">
+  <img src="assets/result-page2.png" width="45%">
+</p>
+
+---
+
 ## Features
 
 ### Resume Analysis
