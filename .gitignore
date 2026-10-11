@@ -58,3 +58,6 @@ frontend/lerna-debug.log*
 
 .DS_Store
 Thumbs.db
+# Retrieval eval index cache
+backend/eval/.cache/
+backend/eval/labels_review.md

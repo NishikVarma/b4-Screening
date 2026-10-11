@@ -1,0 +1,274 @@
+{
+  "knowledge_base": "ai_ml",
+  "labelling": "Drafted by Claude from the PDF text. Each anchor is a verbatim phrase copied from the named book (after the same cleaning ingest applies). An entry is satisfied when a retrieved chunk comes from that book and contains the anchor. Review needed: are these the passages a good interviewer should be able to ground a question in?",
+  "items": [
+    {
+      "id": "q01",
+      "topic": "Decision trees (ID3, CART)",
+      "profile": {"role": "ai_ml", "skills": ["decision trees", "scikit-learn", "pandas", "feature engineering", "Python"], "domain_exposure": ["tabular classification", "credit scoring"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "exemplified by the ID3 algorithm (Quinlan 1986) and its successor C4.5"},
+        {"source": "AIML2.pdf", "anchor": "A decision tree is an acyclic graph that can be used to make decisions"},
+        {"source": "AIML5.pdf", "anchor": "making predictions is relatively straightforward. Given a new input, the tree is traversed"}
+      ]
+    },
+    {
+      "id": "q02",
+      "topic": "Bagging and random forests",
+      "profile": {"role": "ai_ml", "skills": ["random forest", "bagging", "scikit-learn", "XGBoost", "model tuning"], "domain_exposure": ["tabular prediction", "fraud detection"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML3.pdf", "anchor": "The key to understanding random forests is to first understand bootstrap sampling"},
+        {"source": "AIML4.pdf", "anchor": "a main drawback of decision trees is that they tend to overfit the training data. Random forests are one way to address this problem"},
+        {"source": "AIML5.pdf", "anchor": "It is a type of ensemble machine learning algorithm called Bootstrap Aggregation or bagging"}
+      ]
+    },
+    {
+      "id": "q03",
+      "topic": "Boosting (AdaBoost, gradient boosting)",
+      "profile": {"role": "ai_ml", "skills": ["gradient boosting", "XGBoost", "LightGBM", "AdaBoost", "Python"], "domain_exposure": ["ranking", "click prediction"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "really successful boosting algorithm developed for binary"},
+        {"source": "AIML4.pdf", "anchor": "gradient boosted regression tree is another ensemble method"},
+        {"source": "Advanced ML1.pdf", "anchor": "the most widely used form of boosting algorithm called AdaBoost"}
+      ]
+    },
+    {
+      "id": "q04",
+      "topic": "Support vector machines",
+      "profile": {"role": "ai_ml", "skills": ["SVM", "kernel methods", "scikit-learn", "classification", "NumPy"], "domain_exposure": ["text classification", "bioinformatics"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "how Support Vector Machines work. This particular version of the algorithm builds the so-called linear model."},
+        {"source": "AIML5.pdf", "anchor": "Support Vector Machines are perhaps one of the most popular and talked about machine learning algorithms"},
+        {"source": "Advanced ML1.pdf", "anchor": "We begin our discussion of support vector machines by returning to the two-class"}
+      ]
+    },
+    {
+      "id": "q05",
+      "topic": "Kernel trick",
+      "profile": {"role": "ai_ml", "skills": ["kernel trick", "kernel PCA", "Gaussian kernels", "SVM", "MATLAB"], "domain_exposure": ["pattern recognition", "statistical learning"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "Advanced ML1.pdf", "anchor": "making use of the kernel trick, also known as kernel substitution"}
+      ]
+    },
+    {
+      "id": "q06",
+      "topic": "k-means clustering",
+      "profile": {"role": "ai_ml", "skills": ["k-means", "clustering", "scikit-learn", "unsupervised learning", "Python"], "domain_exposure": ["customer segmentation", "marketing analytics"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "The k-means clustering algorithm works as follows. First, the analyst has to choose k"},
+        {"source": "AIML3.pdf", "anchor": "The k-means clustering algorithm is a popular example of unsupervised learning"},
+        {"source": "AIML4.pdf", "anchor": "It tries to find cluster centers that are representative of certain regions of the data"},
+        {"source": "Advanced ML1.pdf", "anchor": "a nonprobabilistic technique called the K-means algorithm (Lloyd, 1982)"}
+      ]
+    },
+    {
+      "id": "q07",
+      "topic": "Gradient descent optimisation",
+      "profile": {"role": "ai_ml", "skills": ["gradient descent", "SGD", "optimization", "PyTorch", "linear algebra"], "domain_exposure": ["deep learning", "model training"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "Gradient descent is an optimization algorithm used to"},
+        {"source": "AIML2.pdf", "anchor": "such as gradient descent (used, among others, to train neural networks)"}
+      ]
+    },
+    {
+      "id": "q08",
+      "topic": "Overfitting and regularisation",
+      "profile": {"role": "ai_ml", "skills": ["regularization", "L2 regularization", "dropout", "TensorFlow", "Keras"], "domain_exposure": ["image classification", "deep learning"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "is the property of a model such that the model predicts very well labels of the examples used during training"},
+        {"source": "AIML2.pdf", "anchor": "Regularization is the most widely used approach to prevent"},
+        {"source": "AIML3.pdf", "anchor": "A constant challenge in machine learning is navigating underfitting and overfitting"},
+        {"source": "AIML1.pdf", "anchor": "it is quite easy for it to overfit the training data, and precautions to avoid overfitting must be taken"}
+      ]
+    },
+    {
+      "id": "q09",
+      "topic": "Bias-variance trade-off",
+      "profile": {"role": "ai_ml", "skills": ["bias-variance tradeoff", "model selection", "learning curves", "statistics", "R"], "domain_exposure": ["statistical modelling", "forecasting"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "Bias are the simplifying assumptions made by a model to make the target function easier to learn"},
+        {"source": "AIML3.pdf", "anchor": "A constant challenge in machine learning is navigating underfitting and overfitting"},
+        {"source": "Advanced ML1.pdf", "anchor": "We can also examine the bias-variance trade-off quantitatively for this example."}
+      ]
+    },
+    {
+      "id": "q10",
+      "topic": "Cross-validation",
+      "profile": {"role": "ai_ml", "skills": ["cross-validation", "hyperparameter tuning", "grid search", "scikit-learn", "model evaluation"], "domain_exposure": ["applied machine learning", "predictive modelling"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "the common technique that can help you is called cross-validation"},
+        {"source": "AIML4.pdf", "anchor": "Cross-validation is a statistical method of evaluating generalization performance that is more stable and thorough than using a split into a training and a test set"},
+        {"source": "AIML4.pdf", "anchor": "Splitting the dataset into k folds by starting with the first one-k-th part of the data"},
+        {"source": "Advanced ML1.pdf", "anchor": "One solution to this dilemma is to use cross-validation, which is illustrated in Figure 1.18"},
+        {"source": "AIML1.pdf", "anchor": "The above cross-validation approach works best when extra data are available to provide a validation set"}
+      ]
+    },
+    {
+      "id": "q11",
+      "topic": "Naive Bayes",
+      "profile": {"role": "ai_ml", "skills": ["naive Bayes", "text classification", "spam filtering", "NLTK", "probability"], "domain_exposure": ["NLP", "information retrieval"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "The technique is easiest to understand when described using binary or categorical input values"},
+        {"source": "AIML4.pdf", "anchor": "Naive Bayes classifiers are a family of classifiers that are quite similar to the linear models"},
+        {"source": "AIML1.pdf", "anchor": "In machine learning we are often interested in determining the best hypothesis from some space H, given the observed training data D"}
+      ]
+    },
+    {
+      "id": "q12",
+      "topic": "Linear regression",
+      "profile": {"role": "ai_ml", "skills": ["linear regression", "least squares", "pandas", "statsmodels", "data analysis"], "domain_exposure": ["forecasting", "business analytics"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "Linear regression is a linear model, e.g. a model that assumes a linear relationship between the input variables (x) and the single output variable (y)"}
+      ]
+    },
+    {
+      "id": "q13",
+      "topic": "Logistic regression",
+      "profile": {"role": "ai_ml", "skills": ["logistic regression", "binary classification", "scikit-learn", "SQL", "A/B testing"], "domain_exposure": ["churn prediction", "product analytics"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "Logistic regression is named for the function used at the core of the method, the logistic function"}
+      ]
+    },
+    {
+      "id": "q14",
+      "topic": "k-nearest neighbours",
+      "profile": {"role": "ai_ml", "skills": ["k-nearest neighbors", "KNN", "distance metrics", "scikit-learn", "recommendation"], "domain_exposure": ["recommender systems", "similarity search"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML5.pdf", "anchor": "KNN makes predictions using the training dataset directly"},
+        {"source": "AIML2.pdf", "anchor": "the kNN algorithm looks at the close neighborhood of the input example in the space of feature vectors"}
+      ]
+    },
+    {
+      "id": "q15",
+      "topic": "Principal component analysis",
+      "profile": {"role": "ai_ml", "skills": ["PCA", "dimensionality reduction", "feature extraction", "NumPy", "scikit-learn"], "domain_exposure": ["computer vision", "high-dimensional data"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML4.pdf", "anchor": "Principal component analysis is a method that rotates the dataset in a way such that the rotated features are statistically uncorrelated"}
+      ]
+    },
+    {
+      "id": "q16",
+      "topic": "Preprocessing and pipelines",
+      "profile": {"role": "ai_ml", "skills": ["scikit-learn pipelines", "feature scaling", "preprocessing", "pandas", "ML workflows"], "domain_exposure": ["machine learning engineering", "data preparation"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML4.pdf", "anchor": "we will introduce the Pipeline class, which allows us to use grid search and cross-validation on these"},
+        {"source": "AIML4.pdf", "anchor": "algorithms are completely invariant to scaling of the data"}
+      ]
+    },
+    {
+      "id": "q17",
+      "topic": "Precision, recall and evaluation metrics",
+      "profile": {"role": "ai_ml", "skills": ["precision and recall", "confusion matrix", "ROC AUC", "model evaluation", "scikit-learn"], "domain_exposure": ["medical diagnosis", "classification"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML4.pdf", "anchor": "Precision measures how many of the samples predicted as positive are actually positive"}
+      ]
+    },
+    {
+      "id": "q18",
+      "topic": "Imbalanced datasets",
+      "profile": {"role": "ai_ml", "skills": ["imbalanced data", "SMOTE", "oversampling", "anomaly detection", "scikit-learn"], "domain_exposure": ["fraud detection", "rare event prediction"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "In many practical situations, your labeled dataset will have underrepresented the examples of some class"}
+      ]
+    },
+    {
+      "id": "q19",
+      "topic": "Neural networks and backpropagation",
+      "profile": {"role": "ai_ml", "skills": ["neural networks", "backpropagation", "PyTorch", "TensorFlow", "deep learning"], "domain_exposure": ["computer vision", "speech recognition"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "The BACKPROPAGATION algorithm is the most commonly used ANN learning technique"}
+      ]
+    },
+    {
+      "id": "q20",
+      "topic": "PAC learning and learning theory",
+      "profile": {"role": "ai_ml", "skills": ["computational learning theory", "PAC learning", "sample complexity", "statistics", "mathematics"], "domain_exposure": ["theoretical machine learning", "research"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "introduces the probably approximately correct (PAC) learning setting"}
+      ]
+    },
+    {
+      "id": "q21",
+      "topic": "Bayesian learning, MAP and MDL",
+      "profile": {"role": "ai_ml", "skills": ["Bayesian inference", "maximum a posteriori", "probabilistic modelling", "Occam's razor", "Python"], "domain_exposure": ["probabilistic machine learning", "statistics"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "In machine learning we are often interested in determining the best hypothesis from some space H, given the observed training data D"},
+        {"source": "AIML1.pdf", "anchor": "the Minimum Description Length principle, a version of Occam's razor that can be interpreted within a Bayesian framework"}
+      ]
+    },
+    {
+      "id": "q22",
+      "topic": "EM algorithm and latent variables",
+      "profile": {"role": "ai_ml", "skills": ["EM algorithm", "Gaussian mixture models", "latent variables", "unsupervised learning", "NumPy"], "domain_exposure": ["density estimation", "clustering"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "the EM algorithm, a widely used algorithm for learning in the presence of unobserved variables"},
+        {"source": "Advanced ML1.pdf", "anchor": "a nonprobabilistic technique called the K-means algorithm (Lloyd, 1982)"}
+      ]
+    },
+    {
+      "id": "q23",
+      "topic": "Genetic algorithms",
+      "profile": {"role": "ai_ml", "skills": ["genetic algorithms", "evolutionary computation", "optimization", "heuristics", "Python"], "domain_exposure": ["optimization", "scheduling"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "Genetic algorithms (GAS) provide a learning method motivated by an analogy to biological evolution"}
+      ]
+    },
+    {
+      "id": "q24",
+      "topic": "Reinforcement learning / Q-learning",
+      "profile": {"role": "ai_ml", "skills": ["reinforcement learning", "Q-learning", "OpenAI Gym", "policy optimization", "Python"], "domain_exposure": ["robotics", "game playing"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "This chapter focuses on an algorithm called Q learning that can acquire optimal control strategies from delayed rewards"}
+      ]
+    },
+    {
+      "id": "q25",
+      "topic": "Concept learning and version spaces",
+      "profile": {"role": "ai_ml", "skills": ["concept learning", "version spaces", "inductive bias", "symbolic AI", "Prolog"], "domain_exposure": ["knowledge representation", "classical AI"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML1.pdf", "anchor": "This subset of all hypotheses is called the version space with respect to the hypothesis space H and the training examples D"}
+      ]
+    },
+    {
+      "id": "q26",
+      "topic": "Ensemble learning overview",
+      "profile": {"role": "ai_ml", "skills": ["ensemble methods", "stacking", "model averaging", "Kaggle", "scikit-learn"], "domain_exposure": ["competitive machine learning", "tabular data"], "seniority_level": "mid"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "Ensemble learning is a learning paradigm that, instead of trying to learn one super-accurate model"},
+        {"source": "AIML3.pdf", "anchor": "another advanced approach called ensemble modeling. This technique essentially combines algorithms"}
+      ]
+    },
+    {
+      "id": "q27",
+      "topic": "Learning to rank",
+      "profile": {"role": "ai_ml", "skills": ["learning to rank", "search relevance", "LambdaMART", "Elasticsearch", "Python"], "domain_exposure": ["search engines", "e-commerce"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "AIML2.pdf", "anchor": "Learning to rank is a supervised learning problem"}
+      ]
+    },
+    {
+      "id": "q28",
+      "topic": "Graphical models",
+      "profile": {"role": "ai_ml", "skills": ["Bayesian networks", "graphical models", "probabilistic inference", "causal inference", "Python"], "domain_exposure": ["probabilistic reasoning", "decision support"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "Advanced ML1.pdf", "anchor": "also known as directed graphical models, in which the links of the graphs have a particular directionality indicated by arrows"}
+      ]
+    },
+    {
+      "id": "q29",
+      "topic": "Relevance vector machines (sparse Bayesian models)",
+      "profile": {"role": "ai_ml", "skills": ["sparse Bayesian models", "relevance vector machine", "Bayesian regression", "kernel methods", "MATLAB"], "domain_exposure": ["probabilistic machine learning", "regression"], "seniority_level": "senior"},
+      "expected": [
+        {"source": "Advanced ML1.pdf", "anchor": "we shall introduce the relevance vector machine, which is a Bayesian model having one complexity parameter for every training data point"}
+      ]
+    },
+    {
+      "id": "q30",
+      "topic": "Data preparation and shuffling",
+      "profile": {"role": "ai_ml", "skills": ["data cleaning", "data scrubbing", "train-test split", "pandas", "feature scaling"], "domain_exposure": ["data preparation", "data science"], "seniority_level": "junior"},
+      "expected": [
+        {"source": "AIML3.pdf", "anchor": "you randomize all rows in the dataset. This helps to avoid bias in your model"}
+      ]
+    }
+  ]
+}
