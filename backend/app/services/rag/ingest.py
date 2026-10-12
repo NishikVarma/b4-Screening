@@ -35,6 +35,18 @@ ROLE_COLLECTION_MAP = {
     "backend": "knowledge_backend",
 }
 
+# Body pages (1-based, inclusive) of each knowledge-base PDF. Cover, contents,
+# preface, references and index pages are left out: retrieval was returning
+# them instead of topical passages. Files not listed are read whole.
+BODY_PAGES = {
+    "AIML1.pdf": (13, 400),         # Mitchell, Machine Learning
+    "AIML2.pdf": (7, 152),          # Burkov, The Hundred-Page ML Book
+    "AIML3.pdf": (5, 118),          # Theobald, ML for Absolute Beginners
+    "AIML4.pdf": (15, 380),         # Muller & Guido, ML with Python
+    "AIML5.pdf": (12, 158),         # Brownlee, Master ML Algorithms
+    "Advanced ML1.pdf": (21, 730),  # Bishop, PRML
+}
+
 
 # ═══════════════════════════════════════════════════════════════
 # ChromaDB client (singleton)
@@ -59,10 +71,11 @@ def get_embedding_function():
 # PDF loading
 # ═══════════════════════════════════════════════════════════════
 
-def load_pdf(path: Path) -> str:
-    """Extract all text from a PDF file."""
+def load_pdf(path: Path, first_page: int = 1, last_page: int | None = None) -> str:
+    """Extract text from a PDF file, pages first_page..last_page (1-based, inclusive)."""
     doc = fitz.open(str(path))
-    pages = [page.get_text("text") for page in doc]
+    last = min(last_page or len(doc), len(doc))
+    pages = [doc[i].get_text("text") for i in range(first_page - 1, last)]
     doc.close()
     return "\n".join(pages)
 
@@ -84,7 +97,8 @@ def load_all_pdfs(role: str) -> list[dict]:
     for pdf_path in pdf_files:
         logger.info("Loading %s ...", pdf_path.name)
         try:
-            text = load_pdf(pdf_path)
+            first, last = BODY_PAGES.get(pdf_path.name, (1, None))
+            text = load_pdf(pdf_path, first, last)
             if text.strip():
                 docs.append({"filename": pdf_path.name, "text": text})
             else:

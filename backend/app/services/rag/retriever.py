@@ -5,6 +5,7 @@ Called by the question generator with a query built from resume + role.
 
 import logging
 from dataclasses import dataclass
+from functools import lru_cache
 
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
@@ -48,7 +49,9 @@ def _get_client() -> chromadb.ClientAPI:
     return _chroma_client
 
 
+@lru_cache(maxsize=1)
 def _get_embedding_function():
+    # cached: building it loads the SentenceTransformer model from disk
     return SentenceTransformerEmbeddingFunction(
         model_name=settings.embedding_model
     )
@@ -136,7 +139,8 @@ def retrieve_multi(
         top_k_per_query: int = 3,
 ) -> list[RetrievedChunk]:
     """
-    Run multiple queries and merge results, deduplicating by chunk_id.
+    Run multiple queries and merge results, deduplicating by chunk text
+    (the same passage can sit under several chunk ids).
     Returns chunks sorted by best relevance score seen across all queries.
 
     Use this when you have several angles on what to ask about
@@ -148,9 +152,10 @@ def retrieve_multi(
         try:
             results = retrieve(query, role, top_k=top_k_per_query)
             for chunk in results:
-                # keep the highest relevance score for a chunk seen in multiple queries
-                if chunk.chunk_id not in seen or chunk.relevance_score > seen[chunk.chunk_id].relevance_score:
-                    seen[chunk.chunk_id] = chunk
+                # keep the highest relevance score for a passage seen in multiple queries
+                key = " ".join(chunk.text.split())
+                if key not in seen or chunk.relevance_score > seen[key].relevance_score:
+                    seen[key] = chunk
         except Exception as exc:
             logger.warning("Query failed, skipping: %s | error: %s", query, exc)
 

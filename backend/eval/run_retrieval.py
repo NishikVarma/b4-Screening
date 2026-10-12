@@ -198,7 +198,11 @@ def main() -> None:
 
     configs = [tuple(int(x) for x in c.split("/")) for c in args.configs.split(",")]
     source_keys = labels_mod.kb_source_keys("ai_ml")
-    kb_hash = hashlib.md5(json.dumps(source_keys, sort_keys=True).encode()).hexdigest()[:8]
+    # the index depends on the PDFs and on how ingest reads them (BODY_PAGES, chunking)
+    ingest_src = (labels_mod.BACKEND_DIR / "app" / "services" / "rag" / "ingest.py").read_bytes()
+    kb_hash = hashlib.md5(
+        json.dumps(source_keys, sort_keys=True).encode() + ingest_src
+    ).hexdigest()[:8]
     by_key: dict[str, list[str]] = {}
     for name, key in source_keys.items():
         by_key.setdefault(key, []).append(name)

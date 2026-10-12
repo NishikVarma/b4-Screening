@@ -14,7 +14,6 @@ import hashlib
 import json
 import shutil
 import time
-from functools import lru_cache
 from pathlib import Path
 
 from eval import labels as labels_mod
@@ -65,16 +64,12 @@ def main() -> None:
 
     from app.services.rag import ingest, retriever
 
-    # Same function, built once instead of once per query. Results are identical.
-    cached = lru_cache(maxsize=1)(retriever._get_embedding_function)
-    retriever._get_embedding_function = cached
-
     started = time.time()
     n_chunks = ingest.ingest_role(ROLE)
     persist_dir.joinpath(DONE_MARKER).write_text("ok")
     index_seconds = round(time.time() - started, 1)
 
-    embed_model = getattr(cached(), "_model", None)
+    embed_model = getattr(retriever._get_embedding_function(), "_model", None)
     max_seq_length = getattr(embed_model, "max_seq_length", None)
 
     source_keys = labels_mod.kb_source_keys(ROLE)

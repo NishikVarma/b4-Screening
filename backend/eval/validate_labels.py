@@ -22,10 +22,17 @@ REVIEW_PATH = labels_mod.EVAL_DIR / "labels_review.md"
 
 def _load_books(filenames: set[str]) -> dict[str, list[str]]:
     """filename -> normalized text of every page."""
+    from app.services.rag.ingest import BODY_PAGES
+
     books = {}
     for name in sorted(filenames):
+        first, last = BODY_PAGES.get(name, (1, None))
         with fitz.open(str(labels_mod.KB_DIR / "ai_ml" / name)) as doc:
-            books[name] = [normalize(page.get_text("text")) for page in doc]
+            last = min(last or len(doc), len(doc))
+            # keep page numbering by padding the excluded front pages with ""
+            books[name] = [""] * (first - 1) + [
+                normalize(doc[i].get_text("text")) for i in range(first - 1, last)
+            ]
     return books
 
 
