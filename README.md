@@ -448,6 +448,64 @@ The architecture can be migrated to PostgreSQL with minimal changes.
 
 ---
 
+## Evaluation
+
+Retrieval quality on the `ai_ml` knowledge base, measured with `backend/eval/` (no Gemini calls, fixed synthetic candidate profiles, so it is free and repeatable).
+
+**What is measured.** 30 labelled items. Each is a synthetic candidate profile (skills, domains, seniority) plus the book passages a good interviewer could ground a question in. A retrieved chunk is a hit when it comes from an expected book and contains the expected phrase. Metrics: Hit@k, MRR, and Recall@k (share of an item's expected passages found in the top k).
+
+**Results** (mean over 5 runs per configuration, 2026-10-12, `all-MiniLM-L6-v2`, chromadb 0.5.0):
+
+| chunk size/overlap (chunks) | strategy | Hit@1 | Hit@3 | Hit@5 | Hit@8 | MRR | Recall@5 | Recall@8 |
+|---|---|---|---|---|---|---|---|---|
+| 500/50 (1447) | `single_concat` | 0.19 | 0.29 | 0.30 | 0.37 | 0.25 | 0.18 | 0.22 |
+| 500/50 (1447) | `multi_production` | 0.07 | 0.20 | 0.30 | 0.37 | 0.15 | 0.25 | 0.29 |
+| 250/50 (3252) | `single_concat` | 0.10 | 0.30 | 0.37 | 0.40 | 0.20 | 0.21 | 0.23 |
+| 250/50 (3252) | `multi_production` | 0.13 | 0.20 | 0.27 | 0.33 | 0.19 | 0.20 | 0.27 |
+| 150/30 (5418) | `single_concat` | 0.10 | 0.30 | 0.33 | 0.37 | 0.20 | 0.21 | 0.21 |
+| 150/30 (5418) | `multi_production` | 0.03 | 0.13 | 0.27 | 0.43 | 0.14 | 0.18 | 0.31 |
+
+- `single_concat`: one query made of the role, seniority and every skill/domain joined together.
+- `multi_production`: the app's real `build_queries_from_resume` + `retrieve_multi`.
+- A third baseline that uses only the app's first (role-level) query scored 0.00 on every metric, since that query ignores the resume.
+- Hit@8 matters most in practice: the question generator reads the top 8 chunks.
+- Full tables with per-run ranges and the items that never hit: `backend/eval/results/retrieval_2026-10-12_48442c75.md`.
+
+**Before and after the retrieval fixes** (default 500/50, same 30 items, same labels):
+
+| | Hit@5 | Hit@8 | Recall@8 | duplicate chunks in top 8 |
+|---|---|---|---|---|
+| `multi_production`, before | 0.23 | 0.23 | 0.16 | 0.19 |
+| `multi_production`, after | 0.30 | 0.37 | 0.29 | 0.00 |
+| `single_concat`, before | 0.11 | 0.21 | 0.13 | 0.18 |
+| `single_concat`, after | 0.30 | 0.37 | 0.22 | 0.00 |
+
+The fixes were applied together, so the gain cannot be split between them: (1) removed the duplicate PDF `Advanced ML2.pdf` (byte-identical to `AIML1.pdf`), (2) indexed only each book's body pages and skipped covers, contents, prefaces, references and indexes (`BODY_PAGES` in `ingest.py`), (3) de-duplicated merged results by text instead of chunk id, (4) cached the embedding model. The earlier results are kept in `backend/eval/results/retrieval_2026-10-12_22d49e78.md`.
+
+**What the numbers say.**
+- Retrieval is still modest: at most 37% of items find an expected passage in the top 5, at any setting.
+- Multi-query is **not** clearly better than one combined query. At 500/50 the two tie on Hit@5 and Hit@8. Multi-query finds more of an item's expected passages (Recall@8 0.29 vs 0.22) but ranks the first correct one lower (MRR 0.15 vs 0.25). At 250/50 the single query is ahead; at 150/30 multi-query is ahead on Hit@8 only. With 30 items, one item is 0.03, so differences of a few hundredths are noise.
+- No chunk setting is a clear winner for the production strategy (`multi_production` Hit@8: 0.37, 0.33, 0.43). The production chunk size was not changed.
+
+**Caveats.**
+- Small set (30 items), one knowledge base, one embedding model.
+- The profiles and labels were drafted by an AI assistant from the book text and are being reviewed by the project author; anchor phrases are verified to exist in the PDFs (`python -m eval.validate_labels`), but whether each label is the right one is a judgement call.
+- Labels are strict: several books cover the same topic and only the listed passages count, so some genuinely relevant chunks are scored as misses.
+- Page ranges in `BODY_PAGES` were chosen by inspecting each book; a wrong range would hide real content. `eval/tests` checks they lie inside each PDF, not that they are right.
+- Chroma's approximate nearest-neighbour search returned slightly different top-8 lists in different processes on the same index; hence the 5-run means.
+
+**Reproduce.**
+
+```bash
+cd backend
+python -m eval.run_retrieval            # all three chunk configs, 5 runs each (first run builds indexes, slow)
+python -m eval.run_retrieval --configs 500/50 --repeats 3
+python -m eval.validate_labels --review # check anchors, write eval/labels_review.md
+python -m pytest eval/tests             # metric and label-schema tests
+```
+
+---
+
 ## Environment Variables
 
 | Variable           | Description                |
